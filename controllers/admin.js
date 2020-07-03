@@ -20,20 +20,24 @@ exports.postAddProduct = (req, res, next) => {
 
     const newProduct = new Product( id, title, description, imageUrl, price );
     
-    newProduct.save();
-
-    res.redirect('/');
-
+    newProduct.save().then(() => {
+        res.redirect('/');
+    }).catch(err => {
+        console.log(err);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
 
-    Product.fetchAll(products => {
+    Product.fetchAll().then(([rows, fieldData]) => {
         res.render("admin/products-list", {
-            prods: products, pageTitle: 
-            "/admin/products-list", 
+            prods: rows, 
+            pageTitle: "/admin/products-list", 
             path: "/admin/products"});
-    }); 
+
+    }).catch((err) => {
+        console.log(err);
+    })
 };
 
 exports.editProduct = (req, res, next) => {

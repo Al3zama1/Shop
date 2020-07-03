@@ -1,25 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-
-// ** path.dirname returns the directories of a file path
-const p = path.join(
-    path.dirname(process.mainModule.filename),
-    'data',
-    'products.json'
-  );
-
-const loadData = cb => {
-
-     fs.readFile(p, (err, data) => {
-         if (err) {
-             cb([]);
-         } else {
-            cb(JSON.parse(data));  
-         };   
-     });
-};
-
+const db = require("../util/database");
 module.exports = class Product {
 
     constructor(id, title, description, imageUrl, price) { 
@@ -32,48 +11,19 @@ module.exports = class Product {
 
     save() {
 
-        loadData(products => {
-          if (this.id) {
-            // ** Get index of already existing item
-            const existingProductIndex = products.findIndex(
-              prod => prod.id === this.id
-            );
-            const updatedProducts = [...products];
-            //** change already existing item with the updated version
-            updatedProducts[existingProductIndex] = this;
-
-            // ** Write changes to the products.json
-            fs.writeFile(p, JSON.stringify(updatedProducts), err => {
-              console.log(err);
-            });
-          } else {
-            // ** Generate new id
-            this.id = Math.random().toString();
-
-            this.price = parseFloat(this.price);
-
-            // ** Add new product to products
-            products.push(this);
-
-            // ** Write changes to the products.json
-            fs.writeFile(p, JSON.stringify(products), err => {
-              console.log(err);
-            });
-          };
-        });
+      // * to safely insert values and not face the risk of sql injection we put VALUES(?, ?.....)
+      return db.execute('INSERT INTO products (title, price, description, imageUrl) VALUES (?, ?, ?, ?)',
+                [this.title, this.price, this.description, this.imageUrl]);
       };
 
     // ** Get all products from products
-    static fetchAll(cb) {
-        loadData(cb); 
+    static fetchAll() {
+     return db.execute('SELECT * FROM products')
     };
 
     // ** Return product based on ID
-    static getProductById(productId, cb) {
-        loadData(products => {
-            const product = products.find(product => product.id === productId)
-            cb(product); 
-        });
+    static getProductById(id) {
+      return db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
     };
  
     static deleteProduct(id) { 

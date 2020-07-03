@@ -4,22 +4,32 @@ const path = require('path');
 
 exports.productsIndex = (req, res, next) => {
 
-    Product.fetchAll(products => {
-        res.render("shop/index", {pageTitle: "Index", path: "/", prods: products});
-
-    });
+    Product.fetchAll().then(([rows, fieldData]) => {
+        res.render("shop/index", {
+            pageTitle: "Index", 
+            path: "/", 
+            prods: rows});
+    }).catch(err => {
+        console.log(err);
+        
+    })
 };
 
 
 exports.getAllProducts = (req, res, next) => {
 
-    Product.fetchAll(products => {
+    Product.fetchAll().then(([rows, fieldData]) => {
         res.render("shop/products-list", {
             pageTitle: "Products", 
             path: "/products", 
-            prods: products 
+            prods: rows 
         });
-    });
+
+    }).catch(err => {
+        console.log(err);
+    })
+
+
 };
 
 exports.productDetails = (req, res, next) => {
@@ -27,14 +37,18 @@ exports.productDetails = (req, res, next) => {
     const id = req.params.productId;
     
     
-    Product.getProductById(id, product => {
+    Product.getProductById(id).then(([product]) => {
+
         res.render("shop/product-details", {
             pageTitle: "Details", 
             path: "/products", 
-            product: product
+            product: product[0]
         });
+    }).catch(err => {
+        console.log(err);
     });
 };
+
 
 exports.getOrders = (req, res, next) => {
     res.render("shop/orders", {pageTitle: "Orders", path: "/orders"})
