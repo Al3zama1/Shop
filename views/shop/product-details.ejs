@@ -1,0 +1,23 @@
+<%- include('../includes/header') %>
+</head>
+<%- include('../includes/navigation') %>
+
+<main>
+    <div class="container">
+        <div class="row mt-5 justify-content-center">
+            <div class="col-sm">
+                <div class="card text-center mx-auto" style="width: 25rem;">
+                    <img class="card-img-top" src="<%= product.imageUrl %>" alt="book">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= product.title %> </h5>
+                      <p class="card-text"><%= product.description %> </p>
+                      <p class="card-text font-weight-bold">&#36;<%= product.price %> </p>
+                      <%- include("../includes/add-to-cart") %> 
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>

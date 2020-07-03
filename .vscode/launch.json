@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            // allows me to run debugger from any file and it will start with app.js
+            "program": "${workspaceFolder}/app.js",
+            // debugger capable of restricting
+            "restart": true,
+            // use nodmeon so that debugger restarts when the nodemon restarts
+            "runtimeExecutable": "nodemon",
+            // use the terminal instead of the debug console
+            "console": "integratedTerminal"
+        }
+    ]
+}
