@@ -11,7 +11,7 @@ module.exports = class Product {
 
     save() {
 
-      // * to safely insert values and not face the risk of sql injection we put VALUES(?, ?.....)
+      // * to safely insert values and not face the risk of SQL injection we put VALUES(?, ?.....)
       return db.execute('INSERT INTO products (title, price, description, imageUrl) VALUES (?, ?, ?, ?)',
                 [this.title, this.price, this.description, this.imageUrl]);
       };
